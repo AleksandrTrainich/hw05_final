@@ -1,0 +1,59 @@
+{% extends "posts/base.html" %}
+{% block title %}{{markup.title}}{% endblock %}
+{% block content %}
+
+
+<div class="row justify-content-center">
+    {% if user.is_authenticated %}
+    <div class="col-md-8 p-5">
+        <div class="card">
+            <div class="card-header">{{markup.header}}</div>
+            <div class="card-body">
+                              
+                
+                {% if markup.button == 'Добавить' %}
+                    <form method="post" enctype="multipart/form-data" action="{% url 'new_post'  %}">
+                {% endif %}
+                {% if markup.button == 'Редактировать' %}
+                    <form method="post" enctype="multipart/form-data" action="{% url 'post_edit'  username post.id %}">
+                {% endif %}
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="form-group row" >
+                                <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label text-md-right">{{ field.label }}</label>
+                                <div class="col-md-6"  >
+
+                                    
+                                    {{ field }}
+
+                                    {% if field.help_text %}
+                                    <small id="{{ field.id_for_label }}-help" class="form-text text-muted">{{ field.help_text|safe }}</small>
+                                    {% endif %}
+                                </div>                
+                        </div>
+                    {% endfor %}
+
+                    <div class="col-md-6 offset-md-4">              
+                            <button type="submit" class="btn btn-primary">
+                                {{ markup.button }}
+                            </button>
+                    </div>
+                </form>
+            </div> <!-- card body -->
+        </div> <!-- card -->
+    </div> <!-- col -->
+    {% else %}
+    <div class="alert alert-danger" role="alert">
+        Только зарегистрованные пользователи могу создавать статьи!
+    </div>
+    
+    <div class="alert alert-primary" role="alert">
+        <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
+        <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
+    </div>
+
+    {% endif %}
+</div> <!-- row -->
+
+{% endblock %}
