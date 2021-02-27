@@ -38,7 +38,8 @@ class PostURLTests(TestCase):
                                                 'post.html': reverse('post',
                                                                      kwargs={'username': 'Gena',
                                                                              'post_id': 1})}
-        cls.templates_url_names_authorized_client = {'posts/new_post.html': reverse('post_edit',
+        cls.templates_url_names_authorized_client = {'follow.html': reverse('follow_index'),
+                                                     'posts/new_post.html': reverse('post_edit',
                                                                                     kwargs={'username': 'Gena',
                                                                                             'post_id': 1})}
         cls.templates_url_names = {**cls.templates_url_names_guest_client,
@@ -64,9 +65,14 @@ class PostURLTests(TestCase):
             with self.subTest(url=url):
                 response = PostURLTests.guest_client.get(url)
                 self.assertEqual(response.status_code, 200)
+    # Проверяем возвращает ли сервер код 404, если страница не найдена
 
+    def test_url_authorized_client_not_page(self):
+        response = PostURLTests.authorized_client.get('/new_post/not_page/')
+        self.assertEqual(response.status_code, 404)
     # Проверяем что только автор поста может редактировать его
     # статус для гостя и НЕ атора поста
+
     def test_url_post_edit_only_author_status_code(self):
         url = reverse('post_edit', kwargs={'username': 'Gena', 'post_id': 1})
         for client in PostURLTests.client_list_not_author:

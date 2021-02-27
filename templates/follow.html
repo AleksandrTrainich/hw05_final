@@ -1,12 +1,12 @@
 {% extends "posts/base.html" %} 
-{% block title %}Последние обновления {% endblock %}
+{% block title %} Мои подписки {% endblock %}
 
 {% block content %}
 <div class="container">
 
     {% include "menu.html" with follow=True %}
 
-        <h1>Последние обновления на сайте</h1>
+        <h1>Последние обновления в ленте</h1>
         {{author}}
         {% for post in page %}
             {% include "post_item.html" with post=post %}

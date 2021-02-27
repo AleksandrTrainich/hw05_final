@@ -18,6 +18,8 @@ class PostForm(forms.ModelForm):
             'group': _("Выберите группу или оставьте все как есть"),
             "text": _("Напишите что-то хорошее")
         }
+
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

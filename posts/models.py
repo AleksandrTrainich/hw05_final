@@ -43,10 +43,11 @@ class Post(models.Model):
     class Meta:
         ordering = ["-pub_date"]
 
+
 class Comment(models.Model):
     text = models.TextField(
         "Комментарий",
-        help_text='Напишите о свой комментарий')
+        help_text='Напишите свой комментарий')
     created = models.DateTimeField("date published", auto_now_add=True)
     author = models.ForeignKey(User,
                                on_delete=models.CASCADE,
@@ -57,6 +58,7 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['-created']
+
 
 class Follow(models.Model):
     user = models.ForeignKey(User,

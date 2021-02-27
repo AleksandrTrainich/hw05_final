@@ -43,6 +43,7 @@ class PostNewFormTest(TestCase):
 
         cls.post = Post.objects.create(text='Тестовый текст статьи',
                                        author=cls.user)
+
     @classmethod
     def tearDownClass(cls):
         # Метод shutil.rmtree удаляет директорию и всё её содержимое
@@ -55,7 +56,7 @@ class PostNewFormTest(TestCase):
         # Подсчитаем количество записей в Post
         posts_count = Post.objects.count()
         form_data = {'text': 'Текст новой тестовой записи',
-                      'image':PostNewFormTest.uploaded}
+                     'image': PostNewFormTest.uploaded}
     # Отправляем POST-запрос
         response = PostNewFormTest.authorized_client.post(
             reverse('new_post'),
