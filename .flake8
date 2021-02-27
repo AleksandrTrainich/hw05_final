@@ -1,7 +1,0 @@
-[flake8]
-exclude = 
-    env/*,
-    venv/*,
-    */migration/*,
-    */setting.py/,
-    tests/*
