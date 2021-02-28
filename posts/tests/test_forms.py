@@ -68,6 +68,27 @@ class PostNewFormTest(TestCase):
         # Проверяем, сработал ли редирект
         self.assertRedirects(response, reverse('index'))
 
+    def test_create_newpost_not_image(self):
+        # запись не с картинкой
+        text_file = SimpleUploadedFile(name='small.txt',
+                                       content=(b'\x47\x49\x46\x38\x39\x61\x02\x00'),
+                                       content_type='txt')
+
+        form_data = {'text': 'Загрузка не картинки',
+                     'image': text_file}
+        # Отправляем POST-запрос
+        response = PostNewFormTest.authorized_client.post(
+            reverse('new_post'),
+            data=form_data,
+            follow=True
+        )
+
+        self.assertFormError(
+            response, 'form',
+            'image',
+            'Загрузите правильное изображение. Файл, который вы загрузили, поврежден или не является изображением.'
+        )
+
     def test_create_editpost(self):
 
         # Подсчитаем количество записей в Post

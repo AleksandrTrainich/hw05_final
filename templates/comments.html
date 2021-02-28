@@ -1,19 +1,16 @@
 <!-- Форма добавления комментария -->
-
-
 {% block content %}
 {% load user_filters %}
 
 {% if user.is_authenticated %}
 <div class="card my-4">
-    <form method="post" enctype="multipart/form-data" action="{% url 'add_comment' username posts.id %}">
+    <form method="post" enctype="multipart/form-data" action="{% url 'add_comment' username post.id %}">
         {% csrf_token %}
         {% for field in form %}
                         <div class="form-group row" >
                                 <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label text-md-right">{{ field.label }}</label>
                                 <div class="col-md-6"  >
-
-                                    
+                             
                                     {{ field }}
 
                                     {% if field.help_text %}
@@ -28,17 +25,18 @@
     </form>
 </div>
 {% endif %}
+
 {% for item in comments %}
 <div class="media card mb-4">
-<div class="media-body card-body">
-<h5 class="mt-0">
-<a href="{% url 'profile' item.author.username %}"
-name="comment_{{ item.id }}">
-{{ item.author.username }}
-</a>
-</h5>
-<p>{{ item.text | linebreaksbr }}</p>
-</div>
+    <div class="media-body card-body">
+        <h5 class="mt-0">
+            <a href="{% url 'profile' item.author.username %}"
+               name="comment_{{ item.id }}">
+                {{ item.author.username }}
+            </a>
+        </h5>
+            <p>{{ item.text | linebreaksbr }}</p>
+    </div>
 </div>
 {% endfor %} 
 {% endblock %}

@@ -1,42 +1,41 @@
-<main role="main" class="container">
-    <div class="row">
-            <div class="col-md-3 mb-3 mt-1">
-                    <div class="card">
-                            <div class="card-body">
-                                    <div class="h2">
+<div class="row">
+        <div class="col-md-3 mb-3 mt-1">
+                <div class="card">
+                        <div class="card-body">
+                                <div class="h2">
                                         <!-- Имя автора -->
                                         {{ author.get_full_name }}
-                                    </div>
-                                    <div class="h3 text-muted">
-                                         <!-- username автора -->
-                                         @{{author.username}}
-                                    </div>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">
-                                            <div class="h6 text-muted">
-                                            Подписчиков: {{follower_count}} <br />
-                                            Подписан: {{following_count}}
-                                            </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                            <div class="h6 text-muted">
-                                                    <!-- Количество записей -->
-                                                    Записей: {{count}}
-                                            </div>
-                                            {% if following %}
-                                            <a class="btn btn-lg btn-light" 
-                                            href="{% url 'profile_unfollow' username %}" role="button"> 
-                                                                            Отписаться 
-                                                                            </a> 
-                                                                            {% else %}
-                                            <a class="btn btn-lg btn-primary" 
-                                            href="{% url 'profile_follow' username %}" role="button">
-                                                                            Подписаться 
-                                            </a>
-                                            {% endif %}
-                                            
-                                    </li>
-                            </ul>
-                    </div>
-            </div>
+                                </div>
+                                <div class="h3 text-muted">
+                                        <!-- username автора -->
+                                        @{{author.username}}
+                                </div>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                        <div class="h6 text-muted">
+                                        Подписчиков: {{follower_count}} <br />
+                                        Подписан: {{following_count}}
+                                        </div>
+                                </li>
+                                <li class="list-group-item">
+                                        <div class="h6 text-muted">
+                                                <!-- Количество записей -->
+                                                Записей: {{count}}
+                                        </div>
+                                                {% if following %}
+                                                <a class="btn btn-lg btn-light" 
+                                                        href="{% url 'profile_unfollow' username %}" role="button"> 
+                                                        Отписаться 
+                                                </a> 
+                                                {% else %}
+                                                <a class="btn btn-lg btn-primary" 
+                                                        href="{% url 'profile_follow' username %}" role="button">
+                                                        Подписаться 
+                                                </a>
+                                        {% endif %}                                       
+                                </li>
+                        </ul>
+                </div>
+        </div>
+    

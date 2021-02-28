@@ -152,8 +152,8 @@ class PostViewsTests(TestCase):
     def test_post_profile_page_show_correct_context(self):
         response = PostViewsTests.authorized_client.get(reverse(
             'post', kwargs={'username': 'Gena', 'post_id': 1}))
-        prolile_post_text = response.context.get('posts').text
-        prolile_post_image = response.context.get('posts').image
+        prolile_post_text = response.context.get('post').text
+        prolile_post_image = response.context.get('post').image
         self.assertEqual(prolile_post_text, 'Тестовый текст статьи')
         self.assertEqual(prolile_post_image.name, 'posts/small.gif')
 
@@ -163,7 +163,9 @@ class PostViewsTests(TestCase):
         response = PostViewsTests.authorized_client.get(reverse('new_post'))
         # Список ожидаемых типов полей формы:
         # указываем, объектами какого класса должны быть поля формы
-        form_fields = {'group': forms.models.ModelChoiceField, 'text': forms.fields.CharField}
+        form_fields = {'group': forms.models.ModelChoiceField,
+                       'text': forms.fields.CharField,
+                       'image': forms.fields.ImageField}
         # Проверяем, что типы полей формы в словаре context
         # соответствуют ожиданиям
         for value, expected in form_fields.items():
@@ -174,7 +176,7 @@ class PostViewsTests(TestCase):
                 self.assertIsInstance(form_field, expected)
 
     # тест создания редактирования поста
-    def test_initial_value(self):
+    def test_initial_value_post_edit(self):
         # проверим, что поле text отличантся от начального значения(не пустное)
         response = PostViewsTests.authorized_client.get(reverse('post_edit',
                                                                 kwargs={'username': 'Gena', 'post_id': 1}))
@@ -182,28 +184,39 @@ class PostViewsTests(TestCase):
         form_edit = form.has_changed()
         self.assertEqual(form_edit, True)
 
+    # тест создания коммента
+    def test_initial_value_post_edit(self):
+        # проверим, что на странице просмотра отдельного поста есть форма для добаления комментов
+        response = PostViewsTests.authorized_client.get(
+            reverse('post', kwargs={'username': 'Gena', 'post_id': 1}))
+        form_ladel = response.context.get('form').fields.get('text').label
+        self.assertEqual(form_ladel, 'Комментарий')
+
     # тест подписок пользователя
+    # оформим подписку на пользователя 'Gena'
     def test_follow_auth_client(self):
-        # оформим подписку на пользователя 'Gena'
         # отправляем POST-запрос
         PostViewsTests.authorized_client_1.post(reverse('profile_follow',
                                                         kwargs={'username': 'Gena'}))
         following_count = Follow.objects.filter(user=PostViewsTests.user_1).count()
         self.assertEqual(following_count, 1, 'Подписка не оформяется')
 
-        # повторная подписка не пройдет!
+    # проверка повторной подписки
+    def test_follow_double_auth_client(self):
         PostViewsTests.authorized_client_1.post(reverse('profile_follow',
                                                         kwargs={'username': 'Gena'}))
         following_count = Follow.objects.filter(user=PostViewsTests.user_1).count()
         self.assertEqual(following_count, 1, 'Два раза нельзя подписыватся на одного автора')
 
-        # удалим подписку
+    # проверка удаления подписки
+    def test_un_follow_auth_client(self):
         PostViewsTests.authorized_client_1.post(reverse('profile_unfollow',
                                                         kwargs={'username': 'Gena'}))
         following_count = Follow.objects.filter(user=PostViewsTests.user_1).count()
         self.assertEqual(following_count, 0, 'Подписка не удаляется!')
 
-        # оформим подписку на самого себя
+    # проверка оформления подписки на самого себя
+    def test_follow_myself_auth_client(self):
         PostViewsTests.authorized_client.post(reverse('profile_follow',
                                                       kwargs={'username': 'Gena'}))
         following_count = Follow.objects.filter(user=PostViewsTests.user).count()

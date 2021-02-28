@@ -4,20 +4,10 @@
 {% block content %}
 
 {% include 'follow_item.html' %} 
-
-        <div class="col-md-9">
-                
-            <!-- Пост -->
-            {% include "post_item.html" with post=posts %}
-                <div class="card mb-3 mt-1 shadow-sm">
-                       
-                        {% include 'comments.html' %} 
-                </div>
-              
-                
-     </div>
+<div class="col-md-9">
+{% include "post_item.html" with post=post %}
+    <div class="card mb-3 mt-1 shadow-sm">
+        {% include 'comments.html' %} 
     </div>
-    
-</main>
-
+</div>
 {% endblock %}
